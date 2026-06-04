@@ -136,13 +136,39 @@ function CertCarousel() {
   );
 }
 
+interface Project {
+  filename: string;
+  title: string;
+  lines: string[];
+  tags: string[];
+  link: string;
+}
+
+interface Project {
+  filename: string;
+  title: string;
+  lines: string[];
+  tags: string[];
+  link: string;
+}
+
+interface Project {
+  filename: string;
+  title: string;
+  lines: string[];
+  tags: string[];
+  link: string;
+}
+
 function ProjectCarousel() {
   const [current, setCurrent] = useState(0);
-  const touchStartX = useRef(0);
+  const [dragX, setDragX] = useState(0);
+  const [isDragging, setIsDragging] = useState(false);
+  const startX = useRef(0);
+  const containerRef = useRef<HTMLDivElement>(null);
 
   const projects = [
     {
-      index: "01",
       filename: "wazuh-siem-deployment.sh",
       title: "Wazuh SIEM Deployment & Agent Configuration",
       lines: [
@@ -154,7 +180,6 @@ function ProjectCarousel() {
       link: "https://github.com/nayoKnights/Wazuh-SIEM-Deployment-and-Agent-Integration",
     },
     {
-      index: "02",
       filename: "case-management-integration.sh",
       title: "Case Management & Threat Intelligence Engine Integration",
       lines: [
@@ -166,7 +191,6 @@ function ProjectCarousel() {
       link: "https://github.com/nayoKnights/Case-Management-and-Threat-Analysis-Engine-Integration",
     },
     {
-      index: "03",
       filename: "active-directory-lab.sh",
       title: "Active Directory Enterprise Security Lab",
       lines: [
@@ -179,17 +203,27 @@ function ProjectCarousel() {
     },
   ];
 
-  const prev = () => setCurrent((c) => (c === 0 ? projects.length - 1 : c - 1));
-  const next = () => setCurrent((c) => (c === projects.length - 1 ? 0 : c + 1));
-
-  const handleTouchStart = (e: React.TouchEvent) => {
-    touchStartX.current = e.touches[0].clientX;
+  const goTo = (index: number) => {
+    setDragX(0);
+    setCurrent(index);
   };
 
-  const handleTouchEnd = (e: React.TouchEvent) => {
-    const diff = touchStartX.current - e.changedTouches[0].clientX;
-    if (diff > 50) next();
-    else if (diff < -50) prev();
+  const onDragStart = (clientX: number) => {
+    startX.current = clientX;
+    setIsDragging(true);
+  };
+
+  const onDragMove = (clientX: number) => {
+    if (!isDragging) return;
+    setDragX(clientX - startX.current);
+  };
+
+  const onDragEnd = () => {
+    if (!isDragging) return;
+    setIsDragging(false);
+    if (dragX < -80) goTo(current === projects.length - 1 ? 0 : current + 1);
+    else if (dragX > 80) goTo(current === 0 ? projects.length - 1 : current - 1);
+    else setDragX(0);
   };
 
   const p = projects[current];
@@ -197,41 +231,70 @@ function ProjectCarousel() {
   return (
     <div>
       <div
-        className="border border-gray-700 rounded-2xl overflow-hidden"
-        onTouchStart={handleTouchStart}
-        onTouchEnd={handleTouchEnd}
+        ref={containerRef}
+        className="overflow-hidden rounded-2xl cursor-grab active:cursor-grabbing select-none"
+        onMouseDown={(e) => onDragStart(e.clientX)}
+        onMouseMove={(e) => onDragMove(e.clientX)}
+        onMouseUp={onDragEnd}
+        onMouseLeave={onDragEnd}
+        onTouchStart={(e) => onDragStart(e.touches[0].clientX)}
+        onTouchMove={(e) => onDragMove(e.touches[0].clientX)}
+        onTouchEnd={onDragEnd}
       >
-        <div className="bg-[#161b22] px-4 py-3 flex items-center gap-2 border-b border-gray-700">
-          <span className="w-3 h-3 rounded-full bg-[#ff5f57]"></span>
-          <span className="w-3 h-3 rounded-full bg-[#febc2e]"></span>
-          <span className="w-3 h-3 rounded-full bg-[#28c840]"></span>
-          <span className="text-gray-500 text-xs ml-2">{p.filename}</span>
-        </div>
-        <div className="p-6 bg-[#0d1117]">
-          <p className="text-green-400 text-xs mb-1">$ cat project_overview.txt</p>
-          <h3 className="text-white font-bold text-lg mb-4">{p.title}</h3>
-          <div className="mb-4 space-y-2">
-            {p.lines.map((line) => (
-              <p key={line} className="text-gray-400 text-sm">{line}</p>
-            ))}
+        <div
+          className="border border-gray-700 rounded-2xl overflow-hidden"
+          style={{
+            transform: `translateX(${dragX}px)`,
+            transition: isDragging ? "none" : "transform 0.3s ease",
+          }}
+        >
+          <div className="bg-[#161b22] px-4 py-3 flex items-center gap-2 border-b border-gray-700">
+            <span className="w-3 h-3 rounded-full bg-[#ff5f57]"></span>
+            <span className="w-3 h-3 rounded-full bg-[#febc2e]"></span>
+            <span className="w-3 h-3 rounded-full bg-[#28c840]"></span>
+            <span className="text-gray-500 text-xs ml-2">{p.filename}</span>
           </div>
-          <div className="flex flex-wrap gap-2 mb-4">
-            {p.tags.map((tag) => (
-              <span key={tag} className="text-xs border border-green-400 text-green-400 px-2 py-1">{tag}</span>
-            ))}
+
+          <div className="p-6 bg-[#0d1117]">
+            <p className="text-green-400 text-xs mb-1">$ cat project_overview.txt</p>
+            <h3 className="text-white font-bold text-lg mb-4">{p.title}</h3>
+
+            <div className="mb-4 space-y-2">
+              {p.lines.map((line) => (
+                <p key={line} className="text-gray-400 text-sm">{line}</p>
+              ))}
+            </div>
+
+            <div className="flex flex-wrap gap-2 mb-4">
+              {p.tags.map((tag) => (
+                <span key={tag} className="text-xs border border-green-400 text-green-400 px-2 py-1">
+                  {tag}
+                </span>
+              ))}
+            </div>
+
+            {/* FIXED LINK */}
+            <a
+              href={p.link}
+              target="_blank"
+              rel="noreferrer"
+              className="text-green-400 text-sm hover:underline"
+              onClick={(e) => { 
+                if (Math.abs(dragX) > 5) e.preventDefault(); 
+              }}
+            >
+              $ open docs → {p.link.replace("https://", "")}
+            </a>
           </div>
-          <a href={p.link} target="_blank" className="text-green-400 text-sm hover:underline">
-            $ open docs → {p.link.replace("https://", "")}
-          </a>
         </div>
       </div>
 
-      {/* Dot indicators */}
+      {/* Dots */}
       <div className="flex justify-center gap-2 mt-4">
         {projects.map((_, i) => (
           <button
             key={i}
-            onClick={() => setCurrent(i)}
+            onClick={() => goTo(i)}
             className={`w-2 h-2 rounded-full transition ${i === current ? "bg-green-400" : "bg-gray-600"}`}
           />
         ))}
@@ -512,7 +575,7 @@ export default function Home() {
 
       {/* FOOTER */}
       <footer className="border-t border-gray-800 px-8 py-6 flex justify-between items-center text-gray-600 text-sm">
-  <      p>Nathaniel Okyere Asomani — THE SHERLOCK</p>
+        <p> —————— THE SHERLOCK ——————</p>
             <a href="#" className="w-10 h-10 rounded-full border border-gray-700 flex items-center justify-center hover:border-green-400 hover:text-green-400 transition text-gray-400">
     ↑
   </a>
