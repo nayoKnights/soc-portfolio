@@ -107,7 +107,7 @@ function AboutCarousel() {
   return (
     <div>
       <div className="overflow-hidden min-h-[120px]" onTouchStart={handleTouchStart} onTouchEnd={handleTouchEnd}>
-        <p className="text-gray-400 leading-relaxed text-sm" style={{ transition: "opacity 0.4s ease, transform 0.4s ease", opacity: sliding ? 0 : 1, transform: sliding ? "translateX(30px)" : "translateX(0px)" }}>
+        <p className="text-gray-400 leading-relaxed text-base" style={{ transition: "opacity 0.4s ease, transform 0.4s ease", opacity: sliding ? 0 : 1, transform: sliding ? "translateX(30px)" : "translateX(0px)" }}>
           {paragraphs[current]}
         </p>
       </div>
@@ -170,16 +170,16 @@ function CertCarousel() {
           {certs.map((cert) => (
             <div key={cert.title} className="w-full flex-shrink-0 border border-gray-700 rounded-2xl overflow-hidden bg-[#0d1117]">
               <div className="bg-[#161b22] px-4 py-3 border-b border-gray-700">
-                <p className="text-green-400 text-xs tracking-widest">{cert.issuer}</p>
+                <p className="text-green-400 text-sm tracking-widest">{cert.issuer}</p>
               </div>
               <div className="p-6">
                 <h3 className="text-xl font-bold mb-2">{cert.title}</h3>
-                <p className="text-gray-400 text-sm mb-1">{cert.desc}</p>
-                <p className="text-gray-600 text-xs mb-4">{cert.date}</p>
+                <p className="text-gray-400 text-base mb-1">{cert.desc}</p>
+                <p className="text-gray-600 text-sm mb-4">{cert.date}</p>
                 <a
                   href={cert.link}
                   target="_blank"
-                  className="text-xs border border-green-400 text-green-400 px-2 py-1 hover:bg-green-400 hover:text-black transition rounded-lg"
+                  className="text-sm border border-green-400 text-green-400 px-2 py-1 hover:bg-green-400 hover:text-black transition rounded-lg"
                   onClick={(e) => { if (isDragging || Math.abs(dragX) > 5) e.preventDefault(); }}
                 >
                   Verify Certificate
@@ -267,17 +267,17 @@ function ProjectCarousel() {
                 <span className="w-3 h-3 rounded-full bg-[#ff5f57]"></span>
                 <span className="w-3 h-3 rounded-full bg-[#febc2e]"></span>
                 <span className="w-3 h-3 rounded-full bg-[#28c840]"></span>
-                <span className="text-gray-500 text-xs ml-2">{p.filename}</span>
+                <span className="text-gray-500 text-sm ml-2">{p.filename}</span>
               </div>
               <div className="p-6 bg-[#0d1117]">
-                <p className="text-green-400 text-xs mb-1">$ cat project_overview.txt</p>
+                <p className="text-green-400 text-sm mb-1">$ cat project_overview.txt</p>
                 <h3 className="text-white font-bold text-lg mb-3">{p.title}</h3>
-                <p className="text-gray-400 text-sm mb-4">{p.summary}</p>
+                <p className="text-gray-400 text-base mb-4">{p.summary}</p>
                 <a
                   href={p.link}
                   target="_blank"
                   rel="noreferrer"
-                  className="text-green-400 text-sm hover:underline"
+                  className="text-green-400 text-base hover:underline"
                   onClick={(e) => { if (isDragging || Math.abs(dragX) > 5) e.preventDefault(); }}
                 >
                   $ open docs →
@@ -300,7 +300,7 @@ function SkillDropdown({ category, items }: { category: string; items: string[] 
   const [open, setOpen] = useState(false);
   return (
     <div className="relative">
-      <button onClick={() => setOpen(!open)} className="w-full flex justify-between items-center px-4 py-3 border border-gray-700 text-white font-bold text-sm hover:bg-gray-800 transition text-left">
+      <button onClick={() => setOpen(!open)} className="w-full flex justify-between items-center px-4 py-3 border border-gray-700 text-white font-bold text-base hover:bg-gray-800 transition text-left">
         {category}
         <span className="text-green-400 text-lg ml-2">{open ? "✕" : "+"}</span>
       </button>
@@ -309,7 +309,7 @@ function SkillDropdown({ category, items }: { category: string; items: string[] 
           <div className="fixed inset-0 z-10" onClick={() => setOpen(false)} />
           <ul className="absolute z-20 top-full left-0 w-full bg-[#161b22] border border-gray-600 px-4 py-3 space-y-2 shadow-xl">
             {items.map((item) => (
-              <li key={item} className="text-gray-400 text-xs flex items-center gap-2">
+              <li key={item} className="text-gray-400 text-sm flex items-center gap-2">
                 <span className="text-green-400">▸</span> {item}
               </li>
             ))}
@@ -382,8 +382,9 @@ export default function Home() {
           <div className="md:hidden fixed inset-0 z-40 bg-black bg-opacity-60" onClick={() => setMenuOpen(false)} />
           <div className="md:hidden fixed top-0 left-0 h-full w-60 z-50 bg-[#0d1117] border-r border-gray-800 flex flex-col slide-in">
             <div className="flex items-center justify-between px-5 py-5 border-b border-gray-800">
-              <a href="#" className="text-green-400 font-bold text-base" onClick={() => setMenuOpen(false)}>THE SHERLOCK</a>
-              <button onClick={() => setMenuOpen(false)} className="text-gray-500 hover:text-gray-300 text-lg">✕</button>
+              <a href="#" className="text-green-400 font-bold text-lg" onClick={() => setMenuOpen(false)}>THE SHERLOCK</a>
+
+              <button onClick={() => setMenuOpen(false)} className="text-gray-400 hover:text-white text-2xl">✕</button>
             </div>
             <div className="flex flex-col gap-1 px-3 py-5">
               {navItems.map(({ id, label, href, icon }) => (
@@ -395,12 +396,12 @@ export default function Home() {
                     ${activeSection === id ? "text-green-400 bg-gray-800" : "text-gray-500 hover:text-gray-300 hover:bg-gray-800"}`}
                 >
                   <span>{icon}</span>
-                  <span className="text-sm">{label}</span>
+                  <span className="text-base">{label}</span>
                 </a>
               ))}
             </div>
             <div className="mt-auto px-5 py-4 border-t border-gray-800">
-              <p className="text-gray-600 text-xs">THE SHERLOCK // v1.0</p>
+              <p className="text-gray-600 text-sm">THE SHERLOCK // v1.0</p>
             </div>
           </div>
         </>
@@ -411,8 +412,8 @@ export default function Home() {
 
         {/* Top breadcrumb bar */}
         <header className="sticky top-0 z-30 bg-[#0d1117] border-b border-gray-800 px-5 py-3 flex items-center justify-between">
-          <div className="flex items-center gap-2 text-xs text-gray-500 font-mono">
-            <button className="md:hidden text-gray-400 hover:text-gray-300 text-xl mr-2" onClick={() => setMenuOpen(true)}>☰</button>
+          <div className="flex items-center gap-2 text-sm text-gray-500 font-mono">
+            <button className="md:hidden text-gray-200 hover:text-white text-3xl mr-2 p-1" onClick={() => setMenuOpen(true)}>☰</button>
             <span className="text-gray-600">THE SHERLOCK</span>
             <span className="text-gray-700">/</span>
             <span className="text-green-400">{sectionLabel[activeSection] ?? "Home"}</span>
@@ -435,7 +436,7 @@ export default function Home() {
 
           {/* ABOUT */}
           <section id="about" className="px-8 py-16 max-w-4xl mx-auto border-t border-gray-800">
-            <p className="text-green-400 text-sm tracking-widest mb-2">// 01. About Me</p>
+            <p className="text-green-400 text-base md:text-sm tracking-widest mb-2">// 01. About Me</p>
             <h2 className="text-3xl font-bold mb-6">Who I Am</h2>
             <div className="hidden md:grid grid-cols-2 gap-8 text-gray-400 leading-relaxed">
               <p>I'm Nathaniel Okyere Asomani, a cybersecurity professional focused on threat detection, incident response, and security engineering. I thrive in high-pressure environments where fast, accurate decisions protect critical systems.</p>
@@ -447,7 +448,7 @@ export default function Home() {
           {/* SKILLS */}
           <section id="skills" className="px-8 py-16 border-t border-gray-800">
             <div className="max-w-4xl mx-auto">
-              <p className="text-green-400 text-sm tracking-widest mb-2">// 02. Skills</p>
+              <p className="text-green-400 text-base md:text-sm tracking-widest mb-2">// 02. Skills</p>
               <h2 className="text-3xl font-bold mb-8">What I Work With</h2>
               <div className="grid grid-cols-2 gap-3 mb-8">
                 {[
@@ -457,7 +458,7 @@ export default function Home() {
                   { category: "Scripting & Automation", items: ["Python", "Bash Scripting", "Virtualization (VMware / VirtualBox)"] },
                 ].map(({ category, items }) => (<SkillDropdown key={category} category={category} items={items} />))}
               </div>
-              <p className="text-green-400 text-sm font-bold tracking-widest mb-3">Concepts & Frameworks</p>
+              <p className="text-green-400 text-base md:text-sm font-bold tracking-widest mb-3">Concepts & Frameworks</p>
               <div className="grid grid-cols-2 gap-3">
                 {[
                   { category: "SOC & Incident Response", items: ["Incident Response Lifecycle", "SOC Triage & Escalation", "MITRE ATT&CK", "Threat Detection & Hunting", "Log Analysis & Correlation", "SIEM Rule Tuning", "SIEM & SOAR", "IOC & IOA Analysis", "Playbook & Runbook Development"] },
@@ -475,7 +476,7 @@ export default function Home() {
           {/* PROJECTS */}
           <section id="projects" className="px-8 py-16 border-t border-gray-800">
             <div className="max-w-4xl mx-auto">
-              <p className="text-green-400 text-sm tracking-widest mb-2">// 03. Projects</p>
+              <p className="text-green-400 text-base md:text-sm tracking-widest mb-2">// 03. Projects</p>
               <h2 className="text-3xl font-bold mb-8">What I've Built</h2>
               <ProjectCarousel />
             </div>
@@ -484,7 +485,7 @@ export default function Home() {
           {/* CERTIFICATIONS */}
           <section id="certifications" className="px-8 py-16 border-t border-gray-800">
             <div className="max-w-4xl mx-auto">
-              <p className="text-green-400 text-sm tracking-widest mb-2">// 04. Certifications</p>
+              <p className="text-green-400 text-base md:text-sm tracking-widest mb-2">// 04. Certifications</p>
               <h2 className="text-3xl font-bold mb-8">Credentials</h2>
               <div className="hidden md:grid grid-cols-2 gap-6">
                 {[
@@ -507,20 +508,20 @@ export default function Home() {
           {/* CONTACT */}
           <section id="contact" className="px-8 py-16 border-t border-gray-800">
             <div className="max-w-4xl mx-auto">
-              <p className="text-green-400 text-sm tracking-widest mb-2">// 05. Contact</p>
+              <p className="text-green-400 text-base md:text-sm tracking-widest mb-2">// 05. Contact</p>
               <h2 className="text-3xl font-bold mb-8">Get In Touch</h2>
               <div className="flex items-center justify-center gap-8">
                 <a href="mailto:nayoemc2@gmail.com" className="flex flex-col items-center gap-2 group">
                   <div className="w-12 h-12 rounded-full border border-gray-700 flex items-center justify-center group-hover:border-green-400 transition">
                     <span className="text-gray-400 group-hover:text-green-400 transition text-lg">✉</span>
                   </div>
-                  <span className="text-gray-600 text-xs group-hover:text-green-400 transition">Email</span>
+                  <span className="text-gray-600 text-sm group-hover:text-green-400 transition">Email</span>
                 </a>
                 <a href="https://www.linkedin.com/in/asomani-nathaniel-okyere/" target="_blank" className="flex flex-col items-center gap-2 group">
                   <div className="w-12 h-12 rounded-full border border-gray-700 flex items-center justify-center group-hover:border-green-400 transition">
                     <span className="text-gray-400 group-hover:text-green-400 transition text-sm font-bold">in</span>
                   </div>
-                  <span className="text-gray-600 text-xs group-hover:text-green-400 transition">LinkedIn</span>
+                  <span className="text-gray-600 text-sm group-hover:text-green-400 transition">LinkedIn</span>
                 </a>
                 <a href="https://github.com/nayoKnights" target="_blank" className="flex flex-col items-center gap-2 group">
                   <div className="w-12 h-12 rounded-full border border-gray-700 flex items-center justify-center group-hover:border-green-400 transition">
@@ -528,7 +529,7 @@ export default function Home() {
                       <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/>
                     </svg>
                   </div>
-                  <span className="text-gray-600 text-xs group-hover:text-green-400 transition">GitHub</span>
+                  <span className="text-gray-600 text-sm group-hover:text-green-400 transition">GitHub</span>
                 </a>
               </div>
             </div>
